@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { faqs, prerequisites, processSteps, profile, scopeNotice, servicePackages } from "../data/site";
+import { faqs, payment, prerequisites, processSteps, profile, scopeNotice, servicePackages } from "../data/site";
 ---
 
 <BaseLayout
@@ -57,6 +57,7 @@ import { faqs, prerequisites, processSteps, profile, scopeNotice, servicePackage
               <strong>{pkg.price}</strong>
               <em>{pkg.unit}</em>
             </div>
+            <p class="cny-line" data-aud={pkg.price.replace(/[^\d.]/g, "")} aria-live="polite">约 ¥ —（按实时汇率换算）</p>
             <p>{pkg.description}</p>
             <ul>
               {pkg.points.map((point) => <li>{point}</li>)}
@@ -114,7 +115,81 @@ import { faqs, prerequisites, processSteps, profile, scopeNotice, servicePackage
         ))}
       </div>
     </section>
+
+    <section id="payment" class="desk-section">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Payment</span>
+          <h2>付款方式</h2>
+          <p>{payment.note}</p>
+        </div>
+      </div>
+      <div class="delivery-grid">
+        {payment.methods.map((m) => (
+          <article class="delivery-card surface">
+            <span>{m.name}</span>
+            <h3>{m.value}</h3>
+            <p>{m.desc}</p>
+            <button class="btn btn-primary pay-qr-btn" type="button" data-qr={m.qr} data-qr-title={`${m.name}收款码`}>显示收款码</button>
+          </article>
+        ))}
+      </div>
+      <ul class="list pay-tips">
+        {payment.tips.map((tip) => <li>{tip}</li>)}
+      </ul>
+    </section>
   </main>
+
+  <div class="qr-modal" id="payQrModal" hidden>
+    <div class="qr-modal-backdrop" data-qr-close></div>
+    <div class="qr-modal-box" role="dialog" aria-modal="true">
+      <button type="button" class="qr-modal-close" data-qr-close aria-label="关闭">×</button>
+      <strong class="qr-modal-title"></strong>
+      <img class="qr-modal-img" src="" alt="收款二维码" />
+      <p class="qr-modal-tip">截图保存后扫码付款，金额以在服务页确认的为准</p>
+    </div>
+  </div>
+
+  <script is:inline data-astro-rerun>
+    (() => {
+      // 收款码弹窗
+      const modal = document.getElementById("payQrModal");
+      if (modal) {
+        const modalImg = modal.querySelector(".qr-modal-img");
+        const modalTitle = modal.querySelector(".qr-modal-title");
+        document.querySelectorAll(".pay-qr-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            modalImg.src = btn.getAttribute("data-qr");
+            modalTitle.textContent = btn.getAttribute("data-qr-title") || "收款码";
+            modal.hidden = false;
+            document.body.style.overflow = "hidden";
+          });
+        });
+        modal.querySelectorAll("[data-qr-close]").forEach((el) => el.addEventListener("click", () => {
+          modal.hidden = true;
+          document.body.style.overflow = "";
+        }));
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !modal.hidden) { modal.hidden = true; document.body.style.overflow = ""; }
+        });
+      }
+
+      // AUD -> CNY 实时汇率换算（公开 API，失败时降级为参考值）
+      const FALLBACK = 4.7;
+      document.querySelectorAll("[data-aud]").forEach(async (el) => {
+        const aud = Number(el.dataset.aud);
+        if (!aud) return;
+        let rate = FALLBACK;
+        try {
+          const res = await fetch("https://open.er-api.com/v6/latest/AUD");
+          const data = await res.json();
+          if (data && data.rates && data.rates.CNY) rate = data.rates.CNY;
+        } catch (e) {}
+        const cny = Math.round(aud * rate);
+        el.textContent = `约 ¥${cny.toLocaleString("zh-CN")}（按实时汇率换算，以扫码时为准）`;
+      });
+    })();
+  </script>
 </BaseLayout>
 
 <style>
@@ -318,6 +393,25 @@ import { faqs, prerequisites, processSteps, profile, scopeNotice, servicePackage
     margin: 14px 2px 0;
     color: var(--muted);
     font-size: 0.78rem;
+  }
+
+  .cny-line {
+    margin: 0 0 8px;
+    color: var(--gold-strong);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .pay-qr-btn {
+    margin-top: auto;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pay-tips {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 0.82rem;
   }
 
   .order-flow {
