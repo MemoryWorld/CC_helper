@@ -294,12 +294,11 @@ export const contentArticleDocs = [
 ];
 
 // 收款方式：支付宝 / 微信收款码
-// TODO: 把收款码图片放到 public/images/ 后，更新下面两个 qr 路径
 export const payment = {
   note: "价格以澳元（AUD）标示，付款时按实时汇率折算为人民币。选好方案后，扫下方任意二维码支付对应金额即可。",
   methods: [
-    { name: "支付宝", value: "打开支付宝扫码", desc: "用支付宝余额或已绑定的银行卡支付人民币", qr: "/images/alipay-qr.svg" },
-    { name: "微信支付", value: "打开微信扫码", desc: "用微信零钱或已绑定的银行卡支付人民币", qr: "/images/wechat-pay-qr.svg" }
+    { name: "支付宝", value: "打开支付宝扫码", desc: "用支付宝余额或已绑定的银行卡支付人民币", qr: "/images/alipay-qr.jpg" },
+    { name: "微信支付", value: "打开微信扫码", desc: "用微信零钱或已绑定的银行卡支付人民币", qr: "/images/wechat-pay-qr.jpg" }
   ],
   tips: [
     "付款时按页面显示的实时汇率换算，以扫码时的实际金额为准",
