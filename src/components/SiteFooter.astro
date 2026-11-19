@@ -1,0 +1,22 @@
+---
+import { footerLinks, profile } from "../data/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">{profile.name} · {profile.role}</p>
+      <p class="footer-copy">
+        仅服务 Anthropic 官方支持国家/地区的用户，不提供账号、代充、共享或网络代理服务。
+        本站为独立第三方技术服务，与 Anthropic 无隶属关系；Claude 是 Anthropic PBC 的商标。
+      </p>
+      <p class="footer-copy">© {year} {profile.brand} · <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+    </div>
+    <div class="footer-links">
+      {footerLinks.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </div>
+  </div>
+</footer>

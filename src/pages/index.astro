@@ -1,0 +1,176 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  audiences,
+  hero,
+  heroStats,
+  homeQuickEntries,
+  processSteps,
+  profile,
+  scopeNotice,
+  updates,
+  whyMe
+} from "../data/site";
+
+const latestUpdates = updates.slice(0, 3);
+const todayLinks = [
+  { href: "/services#pkg-setup", label: "安装配置" },
+  { href: "/services#faq", label: "常见问题" },
+  { href: "/articles", label: "中文指南" },
+  { href: "/connect", label: "预约评估" }
+];
+---
+
+<BaseLayout currentPath="/">
+  <main class="desk">
+    <section class="desk-hero">
+      <aside class="profile-rail surface">
+        <img class="profile-avatar" src={profile.avatar} alt={`${profile.name} 头像`} />
+        <div>
+          <span class="kicker">{profile.location}</span>
+          <h2>{profile.name}</h2>
+          <p>{profile.role}</p>
+        </div>
+        <div class="proof-list" aria-label="服务要点">
+          {heroStats.map((stat) => (
+            <span>{stat.value} · {stat.label}</span>
+          ))}
+        </div>
+        <a class="btn btn-secondary" href="/connect">预约免费 15 分钟评估</a>
+      </aside>
+
+      <div class="hero-stage">
+        <img class="hero-orbit-img" src="/images/orbit-placeholder.svg" alt="" aria-hidden="true" />
+        <div>
+          <span class="kicker">{hero.kicker}</span>
+          <h1>{hero.title}</h1>
+          <p>{hero.description}</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/services">查看服务与价格</a>
+            <a class="btn btn-secondary" href="/connect">免费 15 分钟评估</a>
+            <a class="btn btn-ghost" href="/articles">先看中文指南</a>
+          </div>
+        </div>
+
+        <a class="skill-launch surface" href="/services#pkg-setup">
+          <div>
+            <span class="kicker">Start Here · 最受欢迎</span>
+            <h2>第一次用？先做 <strong>安装配置</strong></h2>
+            <p>60–90 分钟远程 1 对 1：装好、登录好、配好 CLAUDE.md，在你自己的项目里跑通第一个真实任务。</p>
+          </div>
+          <span class="skill-launch-action">A$149 · 查看详情</span>
+        </a>
+
+        <div class="entry-grid">
+          {homeQuickEntries.map((entry, index) => (
+            <a class="entry-card" href={entry.href}>
+              <span class="entry-icon entry-index">0{index + 1}</span>
+              <strong>{entry.label}</strong>
+              <p>{entry.text}</p>
+              <small>{entry.meta}</small>
+            </a>
+          ))}
+        </div>
+
+        <div class="hero-lower">
+          <section class="updates-strip surface">
+            <h3>最近更新</h3>
+            {latestUpdates.map((item) => (
+              <a class="update-mini" href="/updates">
+                <span>{item.date} · {item.tag}</span>
+                <strong>{item.title}</strong>
+              </a>
+            ))}
+          </section>
+          <section class="today-panel surface">
+            <h3>快速入口</h3>
+            <div class="today-links">
+              {todayLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="desk-section">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Who It's For</span>
+          <h2>适合这些人</h2>
+          <p>人在 Claude 支持的国家或地区，想用中文把 Claude Code 一次配到位。</p>
+        </div>
+        <a class="btn btn-secondary" href="/services">看看哪个方案适合我</a>
+      </div>
+      <div class="systems-grid">
+        {audiences.map((item, index) => (
+          <article class="system-card surface">
+            <span>0{index + 1}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="desk-section">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Why Me</span>
+          <h2>不只是装好，而是用顺手</h2>
+          <p>安装只占十分钟，真正花时间的是权限、上下文和工作流。我会把这些按你的项目配好。</p>
+        </div>
+      </div>
+      <div class="systems-grid">
+        {whyMe.map((item) => (
+          <article class="system-card surface">
+            <span>原则</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="desk-section">
+      <div class="section-head">
+        <div>
+          <span class="kicker">How It Works</span>
+          <h2>四步完成，全程远程</h2>
+          <p>先免费评估，确认你的环境和需求都合适，再决定要不要付费。</p>
+        </div>
+        <a class="btn btn-primary" href="/connect">预约免费评估</a>
+      </div>
+      <div class="join-flow">
+        {processSteps.map((step) => (
+          <article class="join-step surface">
+            <span>{step.no}</span>
+            <strong>{step.title}</strong>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="desk-section">
+      <div class="quote-box">
+        <span class="kicker">{scopeNotice.title}</span>
+        <h2 class="section-heading">只做合规、可持续的技术服务</h2>
+        <ul class="list">
+          {scopeNotice.points.map((point) => <li>{point}</li>)}
+        </ul>
+        <p>
+          支持地区以 Anthropic 官方列表为准：
+          <a class="plain-link" href={scopeNotice.officialRegionsUrl} target="_blank" rel="noopener noreferrer">查看官方支持国家/地区 ↗</a>
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .entry-index {
+    color: var(--gold-strong);
+    font-weight: 950;
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,439 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { faqs, prerequisites, processSteps, profile, scopeNotice, servicePackages } from "../data/site";
+---
+
+<BaseLayout
+  title={`服务与价格 | ${profile.name} · Claude Code 部署与工作流咨询`}
+  description="Claude Code 安装配置 A$149 起，MCP 与工作流搭建、团队部署培训、包月顾问。中文远程 1 对 1，仅服务 Anthropic 支持地区用户。"
+  currentPath="/services"
+>
+  <main class="desk services-page">
+    <section class="detail-hero services-hero surface">
+      <div>
+        <span class="kicker">Services & Pricing</span>
+        <h1>服务与价格</h1>
+        <p>
+          四种方案，覆盖从“第一次安装”到“整个团队用起来”。所有服务都是远程 1 对 1 或小组进行，
+          价格以澳元（{profile.currency}）计，含答疑期。不确定选哪个？先约一个免费 15 分钟评估。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/connect">预约免费评估</a>
+          <a class="btn btn-secondary" href="#faq">先看常见问题</a>
+        </div>
+      </div>
+
+      <aside class="shop-terminal surface" aria-label="服务说明">
+        <span class="terminal-dot"></span>
+        <strong>$ claude</strong>
+        <p>远程屏幕共享，由你本人在自己的电脑上操作，我全程指导，不接触你的密码和密钥。</p>
+        <div>
+          <span>中文沟通</span>
+          <span>远程 1 对 1</span>
+          <span>交付文档</span>
+          <span>售后答疑</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="desk-section">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Packages</span>
+          <h2>选择适合你的方案</h2>
+          <p>个人第一次用，选“快速上手”就够了；已经在用、想进一步提效，再考虑工作流或包月。</p>
+        </div>
+      </div>
+
+      <div class="service-cards">
+        {servicePackages.map((pkg, index) => (
+          <article id={pkg.id} class:list={["service-card surface", pkg.featured ? "is-featured" : ""]}>
+            <div class="service-card-top">
+              <span>0{index + 1}</span>
+              <small>{pkg.label}</small>
+            </div>
+            <h3>{pkg.title}</h3>
+            <div class="service-price">
+              <strong>{pkg.price}</strong>
+              <em>{pkg.unit}</em>
+            </div>
+            <p>{pkg.description}</p>
+            <ul>
+              {pkg.points.map((point) => <li>{point}</li>)}
+            </ul>
+            <a class:list={["btn", pkg.featured ? "btn-primary" : "btn-secondary", "service-cta"]} href="/connect">预约这个方案</a>
+          </article>
+        ))}
+      </div>
+      <p class="price-note">价格为起步价，最终报价会在免费评估后根据你的环境和需求确认。团队方案和定制需求请邮件询价。</p>
+    </section>
+
+    <section id="process" class="desk-section order-flow surface">
+      <div>
+        <span class="kicker">Process</span>
+        <h2>合作流程</h2>
+        <p>先免费评估，确认合适再付款。远程会议使用 Zoom 或 Google Meet，结束后配置和文档都留在你那里。</p>
+      </div>
+      <div class="order-steps">
+        {processSteps.map((step) => (
+          <span><b>{step.no}</b>{step.title}</span>
+        ))}
+      </div>
+      <a class="btn btn-primary" href="/connect">开始第一步</a>
+    </section>
+
+    <section class="desk-section two-column">
+      <div class="quote-box">
+        <span class="kicker">开始前请准备</span>
+        <ul class="list">
+          {prerequisites.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="quote-box">
+        <span class="kicker">{scopeNotice.title}</span>
+        <ul class="list">
+          {scopeNotice.points.map((point) => <li>{point}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section id="faq" class="desk-section">
+      <div class="section-head">
+        <div>
+          <span class="kicker">FAQ</span>
+          <h2>常见问题</h2>
+          <p>没找到答案？直接发邮件或预约免费评估。</p>
+        </div>
+      </div>
+      <div class="faq-list">
+        {faqs.map((item, index) => (
+          <details class="faq-item surface" open={index === 0}>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .services-page {
+    padding-bottom: 84px;
+  }
+
+  .services-page [id] {
+    scroll-margin-top: 96px;
+  }
+
+  .services-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+    border-color: rgba(220, 168, 74, 0.34);
+    background:
+      radial-gradient(circle at 78% 18%, rgba(246, 198, 83, 0.18), transparent 22rem),
+      radial-gradient(circle at 24% 86%, rgba(94, 209, 138, 0.1), transparent 24rem),
+      linear-gradient(135deg, rgba(31, 25, 15, 0.92), rgba(7, 9, 10, 0.96) 62%);
+  }
+
+  .services-hero::after {
+    content: "";
+    position: absolute;
+    right: -6%;
+    top: 10%;
+    width: 42%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(246, 198, 83, 0.18);
+    border-radius: 999px;
+    background:
+      radial-gradient(circle, rgba(246, 198, 83, 0.18), transparent 34%),
+      conic-gradient(from 120deg, transparent, rgba(246, 198, 83, 0.22), transparent 48%);
+    opacity: 0.55;
+    animation: serviceOrbit 18s linear infinite;
+  }
+
+  .services-hero > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .shop-terminal {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 300px;
+    padding: 24px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.018)),
+      repeating-linear-gradient(0deg, transparent 0 18px, rgba(246, 198, 83, 0.035) 19px);
+  }
+
+  .terminal-dot {
+    width: 12px;
+    height: 12px;
+    margin-bottom: auto;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 24px rgba(94, 209, 138, 0.72);
+  }
+
+  .shop-terminal strong {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 1.2rem;
+    color: var(--gold-strong);
+  }
+
+  .shop-terminal p {
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .shop-terminal div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .shop-terminal span:not(.terminal-dot) {
+    padding: 7px 10px;
+    border: 1px solid rgba(220, 168, 74, 0.24);
+    border-radius: 999px;
+    color: var(--gold-strong);
+    background: rgba(220, 168, 74, 0.08);
+    font-size: 0.68rem;
+    font-weight: 900;
+  }
+
+  .service-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(220, 168, 74, 0.38);
+  }
+
+  .service-card.is-featured {
+    border-color: rgba(220, 168, 74, 0.52);
+    background:
+      radial-gradient(circle at top right, rgba(246, 198, 83, 0.16), transparent 16rem),
+      linear-gradient(160deg, rgba(44, 34, 17, 0.72), rgba(255, 255, 255, 0.02));
+  }
+
+  .service-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .service-card-top span {
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 950;
+  }
+
+  .service-card-top small {
+    padding: 6px 10px;
+    border: 1px solid rgba(220, 168, 74, 0.25);
+    border-radius: 999px;
+    color: var(--gold-strong);
+    background: rgba(220, 168, 74, 0.08);
+    font-weight: 900;
+  }
+
+  .service-card h3 {
+    margin: 0;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    letter-spacing: -0.03em;
+  }
+
+  .service-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 4px;
+  }
+
+  .service-price strong {
+    color: var(--gold-strong);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    letter-spacing: -0.04em;
+  }
+
+  .service-price em {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-style: normal;
+    font-weight: 800;
+  }
+
+  .service-card p,
+  .order-flow p,
+  .faq-item p {
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.75;
+  }
+
+  .service-card ul {
+    display: grid;
+    gap: 8px;
+    padding: 0;
+    margin: 6px 0 20px;
+    list-style: none;
+  }
+
+  .service-card li {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--muted-strong);
+    background: rgba(255, 255, 255, 0.035);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .service-cta {
+    margin-top: auto;
+    justify-content: center;
+  }
+
+  .price-note {
+    margin: 14px 2px 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .order-flow {
+    display: grid;
+    grid-template-columns: 1.1fr 1.6fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 26px;
+  }
+
+  .order-flow h2 {
+    margin: 12px 0 0;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    letter-spacing: -0.05em;
+  }
+
+  .order-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .order-steps span {
+    min-height: 64px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    color: var(--muted-strong);
+    background: rgba(255, 255, 255, 0.035);
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .order-steps b {
+    color: var(--gold);
+    font-size: 0.68rem;
+  }
+
+  .faq-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+  }
+
+  .faq-item {
+    padding: 18px 22px;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 900;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    color: var(--gold);
+    font-weight: 950;
+  }
+
+  .faq-item[open] summary::after {
+    content: "−";
+  }
+
+  .faq-item p {
+    margin: 12px 0 0;
+  }
+
+  @keyframes serviceOrbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 1280px) {
+    .service-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 980px) {
+    .order-flow,
+    .faq-list {
+      grid-template-columns: 1fr;
+    }
+
+    .order-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services-hero {
+      min-height: auto;
+    }
+
+    .shop-terminal {
+      min-height: 220px;
+    }
+
+    .service-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="480" viewBox="0 0 760 480" role="img" aria-label="Decorative orbit placeholder">
+  <rect width="760" height="480" rx="32" fill="#090c0f"/>
+  <g fill="none" stroke="#dca84a" stroke-width="2" opacity=".72">
+    <ellipse cx="380" cy="240" rx="250" ry="92" transform="rotate(-12 380 240)"/>
+    <ellipse cx="380" cy="240" rx="190" ry="62" transform="rotate(18 380 240)"/>
+    <ellipse cx="380" cy="240" rx="112" ry="34" transform="rotate(-28 380 240)"/>
+  </g>
+  <circle cx="380" cy="240" r="76" fill="#1b1710" stroke="#f3d28b" stroke-width="3"/>
+  <text x="380" y="253" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="800" fill="#f3d28b">SITE</text>
+  <circle cx="585" cy="158" r="12" fill="#f3d28b"/>
+  <circle cx="188" cy="314" r="8" fill="#dca84a"/>
+</svg>

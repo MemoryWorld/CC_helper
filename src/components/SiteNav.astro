@@ -1,0 +1,19 @@
+---
+import { navLinks, profile } from "../data/site";
+
+const { currentPath = "/" } = Astro.props;
+---
+
+<nav class="site-nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">{profile.brand}<span>.</span></a>
+    <div class="nav-links">
+      {navLinks.map((link) => (
+        <a class:list={[currentPath === link.href ? "is-active" : ""]} href={link.href}>
+          {link.label}
+        </a>
+      ))}
+    </div>
+    <a class="nav-cta" href="/connect">免费评估</a>
+  </div>
+</nav>

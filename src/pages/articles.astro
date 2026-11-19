@@ -1,0 +1,298 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { contentArticleDocs, contentCategories, profile, updates } from "../data/site";
+
+const featured = contentArticleDocs.find((doc) => doc.featured) ?? contentArticleDocs[0];
+const rest = contentArticleDocs.filter((doc) => doc.slug !== featured.slug);
+const categories = contentCategories.map((category) => ({
+  ...category,
+  count: contentArticleDocs.filter((doc) => doc.categorySlug === category.slug).length
+}));
+const total = contentArticleDocs.length;
+const latestUpdates = updates.slice(0, 4);
+const searchText = (doc: (typeof contentArticleDocs)[number]) =>
+  [doc.title, doc.summary, doc.category, ...(doc.keywords || [])].join(" ");
+---
+
+<BaseLayout
+  title={`Claude Code 中文指南 | ${profile.name}`}
+  description="Claude Code 中文知识库：入门、订阅与 API 选择、安装前检查、CLAUDE.md、MCP 和团队规范。"
+  currentPath="/articles"
+>
+  <main class="hub-shell">
+    <section class="hub-layout knowledge-layout">
+      <aside class="hub-sidebar">
+        <div class="hub-panel surface">
+          <div class="hub-panel-title">
+            <div>
+              <span class="kicker">Knowledge Base</span>
+              <h2>中文指南</h2>
+            </div>
+            <span class="content-count">{total}</span>
+          </div>
+
+          <label class="search-box">
+            <span>搜索</span>
+            <input id="articleSearch" type="search" placeholder="搜安装、MCP、CLAUDE.md、团队" autocomplete="off" />
+          </label>
+
+          <div class="category-list" role="tablist" aria-label="内容分类">
+            <button class="category-button is-active" type="button" data-filter="all">
+              <span>全部内容</span>
+              <em>{total}</em>
+            </button>
+            {categories.map((category) => (
+              <button class="category-button" type="button" data-filter={category.slug}>
+                <span>{category.label}</span>
+                <em>{category.count}</em>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div class="hub-panel surface knowledge-note">
+          <span class="kicker">Need Help?</span>
+          <strong>看完还是不想自己折腾？</strong>
+          <p>预约一次远程安装配置，60–90 分钟帮你把环境、权限和 CLAUDE.md 一次配好。</p>
+          <a class="plain-link" href="/services#pkg-setup">查看安装配置方案 →</a>
+        </div>
+      </aside>
+
+      <section class="hub-main knowledge-main">
+        <article
+          class="knowledge-feature surface"
+          data-preview-card
+          data-category={featured.categorySlug}
+          data-slug={featured.slug}
+          data-title={featured.title}
+          data-summary={featured.summary}
+          data-tags={(featured.keywords || []).join(" ")}
+          data-search={searchText(featured)}
+        >
+          <div class="feature-copy">
+            <div class="article-meta">
+              <span>推荐先读</span>
+              <span>{featured.category}</span>
+            </div>
+            <h1>{featured.title}</h1>
+            <p>{featured.summary}</p>
+            <div class="feature-actions">
+              <button class="btn btn-primary" type="button" data-open={featured.slug}>站内阅读</button>
+              <span class="archive-note">阅读时间 {featured.minutes}</span>
+            </div>
+          </div>
+          <div class="feature-metrics" aria-label="内容概况">
+            <div>
+              <strong>{total}</strong>
+              <span>篇指南</span>
+            </div>
+            <div>
+              <strong>{contentCategories.length}</strong>
+              <span>个主题</span>
+            </div>
+            <div>
+              <strong>中文</strong>
+              <span>持续更新</span>
+            </div>
+          </div>
+        </article>
+
+        <div class="content-toolbar surface">
+          <div>
+            <span class="kicker">Guides</span>
+            <h2>全部指南</h2>
+            <p id="resultSummary">共 {total} 篇</p>
+          </div>
+        </div>
+
+        <div class="article-grid knowledge-grid" id="articleList">
+          {rest.map((article) => (
+            <article
+              class="article-card"
+              data-preview-card
+              data-category={article.categorySlug}
+              data-slug={article.slug}
+              data-search={searchText(article)}
+              data-title={article.title}
+              data-summary={article.summary}
+              data-tags={(article.keywords || []).join(" ")}
+            >
+              <div class="article-meta">
+                <span>{article.category}</span>
+                <span>{article.minutes}</span>
+              </div>
+              <h3>{article.title}</h3>
+              <p>{article.summary}</p>
+              <div class="article-card-footer">
+                <button type="button" data-open={article.slug}>站内阅读</button>
+                <span>指南</span>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="surface panel trust-empty" id="articleEmpty" hidden>暂时没有匹配内容，换个关键词试试。</p>
+      </section>
+
+      <aside class="hub-outline">
+        <div class="hub-panel surface preview-panel">
+          <span class="kicker">预览</span>
+          <h3 id="previewTitle">{featured.title}</h3>
+          <p id="previewSummary">{featured.summary}</p>
+          <div class="outline-list" id="previewTags">
+            {(featured.keywords || []).map((k) => <span>{k}</span>)}
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary" type="button" id="previewArticle">站内阅读</button>
+          </div>
+        </div>
+
+        <div class="hub-panel surface">
+          <span class="kicker">说明</span>
+          <div class="outline-list">
+            <span>内容基于官方文档和实际部署经验整理</span>
+            <span>具体命令和价格以 Anthropic 官方文档为准</span>
+            <span>仅适用于 Claude 支持的国家/地区</span>
+          </div>
+        </div>
+
+        <div class="hub-panel surface">
+          <span class="kicker">最近更新</span>
+          <div class="outline-list">
+            {latestUpdates.map((item) => (
+              <a href="/updates">
+                <strong>{item.title}</strong>
+                <p>{item.date} · {item.tag}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="tx-reader" id="reader" hidden>
+    <div class="tx-reader-backdrop" data-reader-close></div>
+    <article class="tx-reader-box" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+      <button type="button" class="tx-reader-close" data-reader-close aria-label="关闭">×</button>
+      <span class="tx-article-tag" id="readerTag"></span>
+      <h2 id="readerTitle"></h2>
+      <div id="readerBody"></div>
+      <p class="reader-cta"><a class="btn btn-primary" href="/connect">需要帮忙？预约免费评估</a></p>
+    </article>
+  </div>
+
+  <script is:inline data-astro-rerun define:vars={{ docs: contentArticleDocs }}>
+    (() => {
+      const categoryButtons = document.querySelectorAll("[data-filter]");
+      const cards = document.querySelectorAll("[data-preview-card]");
+      const empty = document.getElementById("articleEmpty");
+      const searchInput = document.getElementById("articleSearch");
+      const resultSummary = document.getElementById("resultSummary");
+      const previewTitle = document.getElementById("previewTitle");
+      const previewSummary = document.getElementById("previewSummary");
+      const previewTags = document.getElementById("previewTags");
+      const previewArticle = document.getElementById("previewArticle");
+      let activeCategory = "all";
+      let currentSlug = docs.find((d) => d.featured)?.slug || docs[0]?.slug;
+      const bySlug = Object.fromEntries(docs.map((doc) => [doc.slug, doc]));
+
+      const updatePreview = (card) => {
+        if (!card) return;
+        currentSlug = card.dataset.slug || currentSlug;
+        previewTitle.textContent = card.dataset.title || "";
+        previewSummary.textContent = card.dataset.summary || "";
+        previewTags.innerHTML = "";
+        (card.dataset.tags || "").split(" ").filter(Boolean).forEach((keyword) => {
+          const tag = document.createElement("span");
+          tag.textContent = keyword;
+          previewTags.appendChild(tag);
+        });
+        cards.forEach((item) => item.classList.toggle("is-active", item === card));
+      };
+
+      const applyFilters = () => {
+        const query = (searchInput?.value || "").trim().toLowerCase();
+        let shown = 0;
+        cards.forEach((card) => {
+          const categoryMatch = activeCategory === "all" || card.dataset.category === activeCategory;
+          const searchMatch = !query || (card.dataset.search || "").toLowerCase().includes(query);
+          const visible = categoryMatch && searchMatch;
+          card.hidden = !visible;
+          if (visible) shown += 1;
+        });
+        if (empty) empty.hidden = shown > 0;
+        if (resultSummary) resultSummary.textContent = "当前显示 " + shown + " 篇";
+      };
+
+      categoryButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          categoryButtons.forEach((item) => item.classList.remove("is-active"));
+          button.classList.add("is-active");
+          activeCategory = button.dataset.filter || "all";
+          applyFilters();
+        });
+      });
+
+      searchInput?.addEventListener("input", applyFilters);
+      cards.forEach((card) => {
+        card.addEventListener("pointerenter", () => updatePreview(card));
+        card.addEventListener("focusin", () => updatePreview(card));
+        card.addEventListener("click", () => updatePreview(card));
+      });
+
+      const reader = document.getElementById("reader");
+      const rTag = document.getElementById("readerTag");
+      const rTitle = document.getElementById("readerTitle");
+      const rBody = document.getElementById("readerBody");
+
+      const openReader = (slug) => {
+        const doc = bySlug[slug];
+        if (!doc || !reader) return;
+        currentSlug = slug;
+        rTag.textContent = doc.category;
+        rTitle.textContent = doc.title;
+        rBody.innerHTML = "";
+        (doc.sections || []).forEach((section) => {
+          const heading = document.createElement("h3");
+          heading.textContent = section.heading;
+          rBody.appendChild(heading);
+          (section.paragraphs || []).forEach((paragraph) => {
+            const p = document.createElement("p");
+            p.textContent = paragraph;
+            rBody.appendChild(p);
+          });
+        });
+        reader.hidden = false;
+        document.body.style.overflow = "hidden";
+      };
+
+      const closeReader = () => {
+        if (!reader) return;
+        reader.hidden = true;
+        document.body.style.overflow = "";
+      };
+
+      document.querySelectorAll("[data-open]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          openReader(button.dataset.open);
+        });
+      });
+      previewArticle?.addEventListener("click", () => openReader(currentSlug));
+      reader?.querySelectorAll("[data-reader-close]").forEach((el) => el.addEventListener("click", closeReader));
+      if (window.__portfolioKnowledgeKeydown) {
+        document.removeEventListener("keydown", window.__portfolioKnowledgeKeydown);
+      }
+      window.__portfolioKnowledgeKeydown = (event) => {
+        if (event.key === "Escape" && reader && !reader.hidden) closeReader();
+      };
+      document.addEventListener("keydown", window.__portfolioKnowledgeKeydown);
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  .reader-cta {
+    margin-top: 24px;
+  }
+</style>

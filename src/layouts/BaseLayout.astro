@@ -1,0 +1,58 @@
+---
+import SiteNav from "../components/SiteNav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { ClientRouter } from "astro:transitions";
+import { profile } from "../data/site";
+import "../styles/global.css";
+
+const {
+  title = `${profile.name} | Claude Code 部署与工作流咨询`,
+  description = "面向海外华人开发者、留学生和中小团队的 Claude Code 中文远程服务：安装配置、MCP 与工作流搭建、团队培训和包月顾问。",
+  currentPath = "/"
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.domain).href;
+---
+
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#08101d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="zh_CN" />
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="route-progress" id="routeProgress" aria-hidden="true"></div>
+    <div class="page-grid"></div>
+    <SiteNav currentPath={currentPath} />
+    <slot />
+    <SiteFooter />
+    <script is:inline>
+      if (!window.__portfolioRouteProgressReady) {
+        window.__portfolioRouteProgressReady = true;
+        document.addEventListener("astro:before-preparation", () => {
+          document.getElementById("routeProgress")?.classList.add("is-loading");
+        });
+        document.addEventListener("astro:after-swap", () => {
+          document.getElementById("routeProgress")?.classList.add("is-finishing");
+        });
+        document.addEventListener("astro:page-load", () => {
+          const progress = document.getElementById("routeProgress");
+          if (!progress) return;
+          progress.classList.remove("is-loading");
+          window.setTimeout(() => progress.classList.remove("is-finishing"), 260);
+        });
+      }
+    </script>
+  </body>
+</html>

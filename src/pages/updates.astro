@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { profile, updates } from "../data/site";
+---
+
+<BaseLayout
+  title={`更新记录 | ${profile.name}`}
+  description="ricardomchen.com 的服务与内容更新记录：新方案、新指南、Claude Code 新功能解读。"
+  currentPath="/updates"
+>
+  <main class="container">
+    <section class="page-hero section">
+      <span class="eyebrow">Updates</span>
+      <h1>更新记录</h1>
+      <p>服务调整、新指南发布、Claude Code 重要版本解读，都会记录在这里。</p>
+    </section>
+
+    <section class="section">
+      <div class="timeline panel">
+        {updates.map((item) => (
+          <article class="timeline-item">
+            <div class="timeline-meta">
+              <span>{item.date}</span>
+              <span class="tag">{item.tag}</span>
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.excerpt}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="quote-box">
+        <span class="eyebrow">下一步</span>
+        <h3>想把 Claude Code 用进你的项目？</h3>
+        <p>先约一个免费 15 分钟评估，确认环境和需求，再决定方案。</p>
+        <div class="button-row">
+          <a class="btn btn-primary" href="/connect">预约免费评估</a>
+          <a class="btn btn-secondary" href="/services">查看服务与价格</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

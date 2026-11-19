@@ -1,0 +1,16 @@
+{
+  "name": "personal-portfolio-template",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.10.1"
+  },
+  "description": "A dark-gold Astro personal portfolio template with pages for content, services, community, resources, and contact.",
+  "license": "MIT"
+}
