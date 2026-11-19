@@ -4,10 +4,10 @@
 // =============================================================
 
 export const profile = {
-  name: "Ricardo Chen", // TODO: 你希望展示的名字
+  name: "Ricardo",
   brand: "ricardomchen",
   role: "Claude Code 部署与 AI 工作流顾问",
-  location: "Australia · 远程服务", // TODO: 城市
+  location: "澳大利亚 · 远程服务",
   domain: "https://ricardomchen.com", // TODO: 确认域名拼写（与 astro.config.mjs 保持一致）
   email: "hello@ricardomchen.com", // TODO: 可用 Cloudflare Email Routing 免费转发到你的邮箱
   bookingUrl: "https://cal.com/YOUR_HANDLE/15min", // TODO: Cal.com / Calendly 预约链接
@@ -293,6 +293,5 @@ export const contentArticleDocs = [
 export const connectChannels = [
   { icon: "calendar", name: "在线预约", value: "选择时间", desc: "免费 15 分钟评估，自动发送会议链接。", href: profile.bookingUrl },
   { icon: "mail", name: "邮件", value: "发送邮件", desc: `${profile.email} · 适合发送详细需求或团队询价。`, href: `mailto:${profile.email}?subject=Claude%20Code%20consultation` },
-  { icon: "wechat", name: "微信", value: "查看二维码", desc: "海外微信号，添加请备注「Claude」+ 所在国家。", qr: "/images/qr-placeholder.svg" },
-  { icon: "telegram", name: "Telegram / WhatsApp", value: "YOUR_HANDLE", desc: "习惯用这两个的朋友可以直接留言。", copy: true }
+  { icon: "wechat", name: "微信", value: "查看二维码", desc: "微信号 Ricardo，添加请备注「Claude」+ 所在国家。", qr: "/images/wechat-qr.jpg" }
 ];
