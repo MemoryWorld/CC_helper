@@ -49,3 +49,23 @@ npx wrangler pages deploy dist --project-name ricardomchen
 - 邮箱：Cloudflare → 域名 → Email → Email Routing，把 `hello@ricardomchen.com` 转发到你的个人邮箱（免费）。
 - www 跳转：Rules → Redirect Rules，把 `www.ricardomchen.com/*` 301 到 `https://ricardomchen.com/$1`。
 - 统计：Pages 项目 → Metrics → 开启 Web Analytics（免费、无 Cookie）。
+
+## 当前线上状态（2026-11-19）
+
+- GitHub 仓库：https://github.com/MemoryWorld/CC_helper （分支 `main`）
+- Cloudflare Pages 项目名：`ricardomchen`，账号 `chenfusheng448@gmail.com`
+- 线上地址：https://ricardomchen.com （`www` 同样可访问）
+- Pages 临时地址：https://ricardomchen.pages.dev
+- DNS：`ricardomchen.com` 和 `www.ricardomchen.com` 均为 CNAME → `ricardomchen.pages.dev`（Proxied）
+
+### 以后如何更新线上网站
+
+当前是**手动上传 dist** 的方式部署（未连 Git 自动构建）。改完代码后执行：
+
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name ricardomchen --branch main
+```
+
+如需 push 自动部署，去 Cloudflare Pages 项目 → Settings → Builds & deployments → Connect to Git，
+连接 `MemoryWorld/CC_helper`，构建命令 `npm run build`，输出目录 `dist`，环境变量 `NODE_VERSION=22`。
